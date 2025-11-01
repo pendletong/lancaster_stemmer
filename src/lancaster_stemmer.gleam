@@ -237,18 +237,12 @@ const default_rules_list = [
   ),
 ]
 
-pub fn main() {
-  io.println("Hello from paicehusk!")
-  let assert Ok(rules) = load_rules("paice-husk-rules.txt")
-  stem("abominable", rules)
-  |> echo
-}
-
 pub fn default_rules() -> Rules {
   dict.from_list(default_rules_list)
 }
 
 pub fn stem(word: String, rules: Rules) -> String {
+  let word = string.lowercase(word)
   case is_valid(word) {
     True -> {
       do_stem(word, rules, True)
