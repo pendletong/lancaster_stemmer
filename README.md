@@ -12,7 +12,7 @@ gleam add lancaster_stemmer@1
 import lancaster_stemmer
 
 pub fn main() -> Nil {
-  // TODO: An example of the project in use
+  lancaster_stemmer.stem("breathe", lancaster_stemmer.default_rules())
 }
 ```
 
