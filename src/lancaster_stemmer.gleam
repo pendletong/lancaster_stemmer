@@ -237,10 +237,24 @@ const default_rules_list = [
   ),
 ]
 
+/// Constructs the default ruleset
 pub fn default_rules() -> Rules {
   dict.from_list(default_rules_list)
 }
 
+/// Lancaster (Paice-Husk) stemming algorithm
+///
+/// ## Example
+///
+/// ```gleam
+/// lancaster_stemmer.stem("Gleam", lancaster_stemmer.stem.default_rules())
+/// // -> gleam
+/// ```
+///
+/// ```gleam
+/// lancaster_stemmer.stem("fancy", lancaster_stemmer.stem.default_rules())
+/// // -> fant
+/// ```
 pub fn stem(word: String, rules: Rules) -> String {
   let word = string.lowercase(word)
   case is_valid(word) {
@@ -327,6 +341,21 @@ fn is_valid_internal(word: String, length: Int) -> Bool {
   }
 }
 
+/// Constructs a ruleset from the specified file
+///
+/// Format of the file is as follows:
+/// Each line contains a specific rule (order matters)
+/// The rule consists of a string made up of the following parts
+/// | Rule part | Description |
+/// | ------ | ------ |
+/// |suffix|the reverse of the required suffix, e.g. the suffix for winning, ing would be specified gni|
+/// |* (optional)|if the rule is only to be used if a previous rule has not been applied then add an asterisk. For example ht*2. only applies if th is the final suffix, so the stem of breath would be brea but the stem of breathe would be breath because the suffix e has already been removed|
+/// |number of chars to remove|this is the number of characters to remove after the suffix has been matched. For example psychoanalytic has the suffix ytic of which 3 characters should be removed to retain psychoanaly, this would be 'city3'. This can be 0|
+/// |append string (optional)|this is the characters that are appended after the match and removal of characters|
+/// |> or .|If > then you can continue stemming process after this one, if . then stemming stops|
+///
+/// So for example with the `psychoanalytic` stem of `psychoanalys` the rule would be `ytic3s.`
+///
 pub fn load_rules(filename: String) -> Result(Rules, Nil) {
   case simplifile.read(filename) {
     Error(_) -> Error(Nil)
