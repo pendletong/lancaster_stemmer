@@ -362,7 +362,7 @@ fn is_valid_internal(word: String, length: Int) -> Bool {
     | "o" <> rest
     | "u" <> rest
     | "y" <> rest -> {
-      { length + 1 + string.length(rest) } >= 3
+      { length + 1 + string.byte_size(rest) } >= 3
     }
     _ -> {
       is_valid_internal(string.drop_start(word, 1), length + 1)
