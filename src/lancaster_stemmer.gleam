@@ -1,7 +1,6 @@
 import gleam/bool
 import gleam/dict
 import gleam/int
-import gleam/io
 import gleam/list
 import gleam/option.{None, Some}
 import gleam/result
@@ -266,45 +265,75 @@ pub fn stem(word: String, rules: Rules) -> String {
 }
 
 fn do_stem(word: String, rules: Rules, intact: Bool) -> String {
-  case string.reverse(word) |> string.pop_grapheme {
-    Ok(#(letter, _)) -> {
-      case dict.get(rules, letter) {
-        Ok(specific_rules) -> {
-          let #(stem, restem, intact) =
-            list.fold_until(
-              specific_rules,
-              #(word, False, intact),
-              fn(state, rule) {
-                case rule_matches(rule, word, intact) {
-                  True -> {
-                    let result = apply_rule(rule, word)
-                    case is_valid(result) {
-                      False -> list.Continue(state)
-                      True -> {
-                        list.Stop(#(result, rule.restem, False))
-                      }
-                    }
-                  }
-                  False -> list.Continue(state)
-                }
-              },
-            )
-          case restem {
-            True -> do_stem(stem, rules, intact)
-            False -> stem
-          }
-        }
-        Error(_) -> word
+  case string.reverse(word) {
+    "a" as letter <> _
+    | "b" as letter <> _
+    | "c" as letter <> _
+    | "d" as letter <> _
+    | "e" as letter <> _
+    | "f" as letter <> _
+    | "g" as letter <> _
+    | "h" as letter <> _
+    | "i" as letter <> _
+    | "j" as letter <> _
+    | "k" as letter <> _
+    | "l" as letter <> _
+    | "m" as letter <> _
+    | "n" as letter <> _
+    | "o" as letter <> _
+    | "p" as letter <> _
+    | "q" as letter <> _
+    | "r" as letter <> _
+    | "s" as letter <> _
+    | "t" as letter <> _
+    | "u" as letter <> _
+    | "v" as letter <> _
+    | "w" as letter <> _
+    | "x" as letter <> _
+    | "y" as letter <> _
+    | "z" as letter <> _ -> {
+      case stem_letter(rules, letter, word, intact) {
+        #(stem, True, intact) -> do_stem(stem, rules, intact)
+        #(stem, _, _) -> stem
       }
     }
-    Error(_) -> word
+
+    _ -> word
+  }
+}
+
+fn stem_letter(
+  rules: dict.Dict(String, List(Rule)),
+  letter: String,
+  word: String,
+  intact: Bool,
+) -> #(String, Bool, Bool) {
+  case dict.get(rules, letter) {
+    Ok(specific_rules) -> {
+      // let #(stem, restem, intact) =
+      list.fold_until(specific_rules, #(word, False, intact), fn(state, rule) {
+        case rule_matches(rule, word, intact) {
+          True -> {
+            let result = apply_rule(rule, word)
+            case is_valid(result) {
+              False -> list.Continue(state)
+              True -> {
+                list.Stop(#(result, rule.restem, False))
+              }
+            }
+          }
+          False -> list.Continue(state)
+        }
+      })
+    }
+    Error(_) -> #(word, False, False)
   }
 }
 
 fn rule_matches(rule: Rule, word: String, stem_intact: Bool) -> Bool {
-  case !stem_intact && rule.intact {
-    True -> False
-    False -> string.ends_with(word, rule.suffix)
+  case stem_intact || !rule.intact {
+    True -> string.ends_with(word, rule.suffix)
+    False -> False
   }
 }
 
