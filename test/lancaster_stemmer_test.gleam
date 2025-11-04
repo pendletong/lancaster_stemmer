@@ -25,7 +25,7 @@ fn run_test(
   case splitter.split(line_split, tests) {
     #("", "", "") -> Nil
     #(line, _, rest) -> {
-      case splitter.split(row_split, line) |> echo {
+      case splitter.split(row_split, line) {
         #("", "", "") -> Nil
         #(word, _, stem) -> {
           assert lancaster_stemmer.stem(word, rules) == stem
