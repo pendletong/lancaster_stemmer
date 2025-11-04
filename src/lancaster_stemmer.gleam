@@ -347,9 +347,30 @@ fn is_valid(word: String) -> Bool {
     "a" <> rest | "e" <> rest | "i" <> rest | "o" <> rest | "u" <> rest -> {
       rest != ""
     }
-    _ -> {
+    "b" <> _
+    | "c" <> _
+    | "d" <> _
+    | "f" <> _
+    | "g" <> _
+    | "h" <> _
+    | "j" <> _
+    | "k" <> _
+    | "l" <> _
+    | "m" <> _
+    | "n" <> _
+    | "p" <> _
+    | "q" <> _
+    | "r" <> _
+    | "s" <> _
+    | "t" <> _
+    | "v" <> _
+    | "w" <> _
+    | "x" <> _
+    | "y" <> _
+    | "z" <> _ -> {
       is_valid_internal(word, 0)
     }
+    _ -> False
   }
 }
 
@@ -362,10 +383,36 @@ fn is_valid_internal(word: String, length: Int) -> Bool {
     | "o" <> rest
     | "u" <> rest
     | "y" <> rest -> {
-      { length + 1 + string.byte_size(rest) } >= 3
+      case length {
+        0 -> string.byte_size(rest) >= 2
+        _ if length > 1 -> True
+        _ -> rest != ""
+      }
+    }
+    "b" <> rest
+    | "c" <> rest
+    | "d" <> rest
+    | "f" <> rest
+    | "g" <> rest
+    | "h" <> rest
+    | "j" <> rest
+    | "k" <> rest
+    | "l" <> rest
+    | "m" <> rest
+    | "n" <> rest
+    | "p" <> rest
+    | "q" <> rest
+    | "r" <> rest
+    | "s" <> rest
+    | "t" <> rest
+    | "v" <> rest
+    | "w" <> rest
+    | "x" <> rest
+    | "z" <> rest -> {
+      is_valid_internal(rest, length + 1)
     }
     _ -> {
-      is_valid_internal(string.drop_start(word, 1), length + 1)
+      False
     }
   }
 }
