@@ -385,8 +385,8 @@ fn is_valid_internal(word: String, length: Int) -> Bool {
     | "y" <> rest -> {
       case length {
         0 -> string.byte_size(rest) >= 2
-        _ if length > 1 -> True
-        _ -> rest != ""
+        1 -> rest != ""
+        _ -> True
       }
     }
     "b" <> rest
