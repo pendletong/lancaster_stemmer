@@ -6,7 +6,7 @@ version = "1.0.1"
 #
 description = "Gleam implementation of the Lancaster (Paice/Husk) Stemmer"
 licences = ["Apache-2.0"]
-repository = { type = "gitea", host = "git.pendleton.ie", user = "pendletong", repo = "lancaster_stemmer" }
+repository = { type = "github", user = "pendletong", repo = "lancaster_stemmer" }
 links = [{ title = "Lancaster Stemmer Specs", href = "https://dl.acm.org/doi/10.1145/101306.101310" }]
 #
 # For a full reference of all the available options, you can have a look at
